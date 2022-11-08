@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
@@ -17,6 +17,7 @@ const run = async() => {
     try{
         const serviceCollection = client.db('dentCare').collection('services');
 
+        // Get All Servicess Or Get Services By Limit
         app.get('/services', async(req, res) => {
             // get limit size from query
             const limit = req.query.limit;
@@ -33,7 +34,16 @@ const run = async() => {
                 services = await cursor.toArray();
             }
             res.send(services);
-        })
+        });
+
+
+        // Get a Service by Id
+        app.get('/services/:id', async(req, res) => {
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)}
+            const service = await serviceCollection.findOne(query);
+            res.send(service);
+        });
 
     }
     finally{
