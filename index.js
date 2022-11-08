@@ -18,9 +18,20 @@ const run = async() => {
         const serviceCollection = client.db('dentCare').collection('services');
 
         app.get('/services', async(req, res) => {
+            // get limit size from query
+            const limit = req.query.limit;
+
             const query = {}
             const cursor = serviceCollection.find(query);
-            const services = await cursor.toArray();
+            let services;
+
+            // Check limit is availabe
+            if(limit){
+                services = await cursor.limit(parseInt(limit)).toArray();
+            }
+            else {
+                services = await cursor.toArray();
+            }
             res.send(services);
         })
 
