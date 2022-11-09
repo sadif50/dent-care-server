@@ -16,6 +16,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 const run = async() => {
     try{
         const serviceCollection = client.db('dentCare').collection('services');
+        const reviewCollection = client.db('dentCare').collection('reviews');
 
         // Get All Servicess Or Get Services By Limit
         app.get('/services', async(req, res) => {
@@ -54,6 +55,25 @@ const run = async() => {
             const new_service = {...service, created_at};
 
             const result = await serviceCollection.insertOne(new_service);
+            res.send(result);
+        });
+
+        /*********************
+         * *******************
+         * REVIEW API
+         * *******************
+         ********************/
+
+        // Add a Review to database
+        app.post('/review', async(req, res) => {
+            // Get data from body
+            const review = req.body;
+            // Create Date
+            const created_at = new Date();
+            // add current date with service data
+            const new_review = {...review, created_at};
+
+            const result = await reviewCollection.insertOne(new_review);
             res.send(result);
         });
 
