@@ -64,6 +64,16 @@ const run = async() => {
          * *******************
          ********************/
 
+        // Get review by service_id
+        app.get('/review/:id', async(req, res) => {
+            const query = {service_id: req.params.id}
+
+            const cursor = reviewCollection.find(query).sort({created_at: -1});
+            const reviews = await cursor.toArray();
+
+            res.send(reviews);
+        });
+
         // Add a Review to database
         app.post('/review', async(req, res) => {
             // Get data from body
