@@ -64,9 +64,19 @@ const run = async() => {
          * *******************
          ********************/
 
-        // Get review by service_id
+        // Get reviews by service_id
         app.get('/review/:id', async(req, res) => {
             const query = {service_id: req.params.id}
+
+            const cursor = reviewCollection.find(query).sort({created_at: -1});
+            const reviews = await cursor.toArray();
+
+            res.send(reviews);
+        });
+
+        // Get reviews by email
+        app.get('/review', async(req, res) => {
+            const query = {reviewer_email: req.query.email}
 
             const cursor = reviewCollection.find(query).sort({created_at: -1});
             const reviews = await cursor.toArray();
