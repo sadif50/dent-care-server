@@ -64,6 +64,13 @@ const run = async() => {
          * *******************
          ********************/
 
+        // Get reviews by its id
+        app.get('/review_id/:id', async(req, res) => {
+            const query = {_id: ObjectId(req.params.id)}
+            const result = await reviewCollection.findOne(query);
+            res.send(result);
+        });
+
         // Get reviews by service_id
         app.get('/review/:id', async(req, res) => {
             const query = {service_id: req.params.id}
@@ -96,6 +103,35 @@ const run = async() => {
             const result = await reviewCollection.insertOne(new_review);
             res.send(result);
         });
+
+        // Edit Review by ID
+        app.patch('/review/:id', async(req, res) => {
+            // Set Query
+            const query = {_id: ObjectId(req.params.id)};
+
+            const review = req.body;
+
+            const updatedReview = {
+                $set: {
+                    
+                }
+            }
+
+            const result = await reviewCollection.updateOne(query, updatedReview);
+            res.send(result);
+
+
+        })
+
+        // Delete Review By Id
+        app.delete('/review/:id', async(req, res) => {
+            // Set Query
+            const query = {_id: ObjectId(req.params.id)}
+
+            // Delete from collection
+            const result = await reviewCollection.deleteOne(query);
+            res.send(result);
+        })
 
     }
     finally{
