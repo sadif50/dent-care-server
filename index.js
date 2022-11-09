@@ -23,7 +23,7 @@ const run = async() => {
             const limit = req.query.limit;
 
             const query = {}
-            const cursor = serviceCollection.find(query);
+            const cursor = serviceCollection.find(query).sort({created_at: -1});
             let services;
 
             // Check limit is availabe
@@ -46,8 +46,14 @@ const run = async() => {
 
         // Add a service to database
         app.post('/services', async(req, res) => {
+            // Get data from body
             const service = req.body;
-            const result = await serviceCollection.insertOne(service);
+            // Create Date
+            const created_at = new Date();
+            // add current date with service data
+            const new_service = {...service, created_at};
+
+            const result = await serviceCollection.insertOne(new_service);
             res.send(result);
         });
 
