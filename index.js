@@ -104,19 +104,19 @@ const run = async() => {
             res.send(result);
         });
 
-        // Edit Review by ID
+        // Edit Review by ID with patch method
         app.patch('/review/:id', async(req, res) => {
-            // Set Query
+            // Set Query with review _id
             const query = {_id: ObjectId(req.params.id)};
 
+            // get client data
             const review = req.body;
-
+            // set client data
             const updatedReview = {
-                $set: {
-                    
-                }
+                $set: review
             }
 
+            // Update data
             const result = await reviewCollection.updateOne(query, updatedReview);
             res.send(result);
 
